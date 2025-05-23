@@ -3,6 +3,7 @@ package core.controllers;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.Plane;
+import core.models.storage.PlaneStorage;
 
 public class PlaneController {
     public static Response createPlane(String id, String brand, String model, String maxCapacity, String airline) {
@@ -81,7 +82,7 @@ public class PlaneController {
             }
 
             // Obtener instancia de Storage y buscar el avión
-            PlaneStorages storage = PlaneStorage.getInstance();
+            PlaneStorage storage = PlaneStorage.getInstance();
             Plane plane = storage.getPlane(idInt);
 
             if (plane == null) {
@@ -108,7 +109,7 @@ public class PlaneController {
             }
 
             // Obtener instancia de Storage y verificar si el avión existe
-            Storage storage = Storage.getInstance();
+            PlaneStorage storage = PlaneStorage.getInstance();
             Plane plane = storage.getPlane(idInt);
             if (plane == null) {
                 return new Response("Airplane not found", Status.NOT_FOUND);
@@ -159,7 +160,7 @@ public class PlaneController {
             }
 
             // Obtener instancia de Storage y eliminar el avión
-            Storage storage = Storage.getInstance();
+            PlaneStorage storage = PlaneStorage.getInstance();
             if (!storage.delPlane(idInt)) {
                 return new Response("Airplane not found", Status.NOT_FOUND);
             }

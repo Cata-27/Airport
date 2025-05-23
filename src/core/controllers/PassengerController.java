@@ -5,11 +5,10 @@
 package core.controllers;
 
 import core.controllers.utils.Status;
-import core.controllers.utils.Response;
 import core.models.Plane;
 import core.controllers.utils.Response;
+import core.models.storage.PassengerStorage;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 public class PassengerController {
 
@@ -31,15 +30,12 @@ public class PassengerController {
                 return new Response("ID must be numeric", Status.BAD_REQUEST);
             }
 
-            // First Name Validation
             if (firstName.trim().isEmpty()) {
                 return new Response("First name must not be empty", Status.BAD_REQUEST);
             }
-            // Last Name Validation
             if (lastName.trim().isEmpty()) {
                 return new Response("Last name must not be empty", Status.BAD_REQUEST);
             }
-            // Date of Birth Validation
             try {
                 yearInt = Integer.parseInt(year);
                 monthInt = Integer.parseInt(month);
@@ -50,7 +46,6 @@ public class PassengerController {
             } catch (Exception ex) {
                 return new Response("Invalid date of birth", Status.BAD_REQUEST);
             }
-            // Phone Code Validation
             try {
                 phoneCodeInt = Integer.parseInt(phoneCode);
                 if (phoneCodeInt < 0) {
@@ -63,7 +58,6 @@ public class PassengerController {
                 return new Response("Phone code must be numeric", Status.BAD_REQUEST);
             }
 
-            // Phone Validation
             try {
                 phoneLong = Long.parseLong(phone);
                 if (phoneLong < 0) {
@@ -76,7 +70,6 @@ public class PassengerController {
                 return new Response("Phone must be numeric", Status.BAD_REQUEST);
             }
 
-            // Country Validation
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
@@ -95,8 +88,6 @@ public class PassengerController {
     public static Response readPlane(String id) {
         try {
             long idLong;
-
-            // ID Validation
             try {
                 idLong = Long.parseLong(id);
                 if (idLong < 0) {
@@ -106,9 +97,8 @@ public class PassengerController {
                 return new Response("ID must be numeric", Status.BAD_REQUEST);
             }
 
-            Storage storage = Storage.getInstance();
+            PassengerStorage storage = PassengerStorage.getInstance();
 
-            // Changed from Person to Plane
             Plane plane = storage.getPlane(idLong);
             if (plane == null) {
                 return new Response("Plane not found", Status.NOT_FOUND);
@@ -125,7 +115,6 @@ public class PassengerController {
             int yearInt, monthInt, dayInt, phoneCodeInt;
             long phoneLong;
 
-            // ID Validation
             try {
                 idLong = Long.parseLong(id);
                 if (idLong < 0) {
@@ -135,25 +124,20 @@ public class PassengerController {
                 return new Response("ID must be numeric", Status.BAD_REQUEST);
             }
 
-            Storage storage = Storage.getInstance();
+            PassengerStorage storage = PassengerStorage.getInstance();
 
-            // Changed from Person to Plane
             Plane plane = storage.getPlane(idLong);
             if (plane == null) {
                 return new Response("Plane not found", Status.NOT_FOUND);
             }
 
-            // First Name Validation
             if (firstName.trim().isEmpty()) {
                 return new Response("First name must not be empty", Status.BAD_REQUEST);
             }
 
-            // Last Name Validation
             if (lastName.trim().isEmpty()) {
                 return new Response("Last name must not be empty", Status.BAD_REQUEST);
             }
-
-            // Date of Birth Validation
             try {
                 yearInt = Integer.parseInt(year);
                 monthInt = Integer.parseInt(month);
@@ -165,12 +149,10 @@ public class PassengerController {
                 return new Response("Invalid date of birth", Status.BAD_REQUEST);
             }
 
-            // Country Code Validation
             if (countryCode.trim().isEmpty()) {
                 return new Response("Country code must not be empty", Status.BAD_REQUEST);
             }
 
-            // Phone Code Validation
             try {
                 phoneCodeInt = Integer.parseInt(phoneCode);
                 if (phoneCodeInt < 0) {
@@ -183,7 +165,6 @@ public class PassengerController {
                 return new Response("Phone code must be numeric", Status.BAD_REQUEST);
             }
 
-            // Phone Validation
             try {
                 phoneLong = Long.parseLong(phone);
                 if (phoneLong < 0) {
@@ -196,7 +177,6 @@ public class PassengerController {
                 return new Response("Phone must be numeric", Status.BAD_REQUEST);
             }
 
-            // Country Validation
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
@@ -222,7 +202,6 @@ public class PassengerController {
         try {
             long idLong;
 
-            // ID Validation
             try {
                 idLong = Long.parseLong(id);
                 if (idLong < 0) {
@@ -232,8 +211,7 @@ public class PassengerController {
                 return new Response("ID must be numeric", Status.BAD_REQUEST);
             }
 
-            Storage storage = Storage.getInstance();
-            // Changed from Person to Plane
+            PassengerStorage storage = PassengerStorage.getInstance();
             if (!storage.delPlane(idLong)) {
                 return new Response("Plane not found", Status.NOT_FOUND);
             }

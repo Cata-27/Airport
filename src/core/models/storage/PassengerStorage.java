@@ -1,6 +1,7 @@
 package core.models.storage;
 
 import core.models.Passenger;
+import core.models.Plane;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,7 +50,6 @@ public class PassengerStorage {
         }
     }
 
-    // Buscar pasajero por ID
     public Passenger getById(long id) {
         for (Passenger p : passengers) {
             if (p.getId() == id) {
@@ -59,14 +59,12 @@ public class PassengerStorage {
         return null;
     }
 
-    // Devolver todos los pasajeros
     public List<Passenger> getAll() {
-        return new ArrayList<>(passengers);  // Copia defensiva
+        return new ArrayList<>(passengers); 
     }
 
-    // Agregar un nuevo pasajero
     public boolean add(Passenger p) {
-        if (getById(p.getId()) == null) { // Validar que no esté repetido
+        if (getById(p.getId()) == null) { 
             passengers.add(p);
             System.out.println("Pasajero agregado: " + p.getFirstname());
             return true;
@@ -75,4 +73,13 @@ public class PassengerStorage {
             return false;
         }
     }
+
+    public Plane getPlane(long idLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean delPlane(long idLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

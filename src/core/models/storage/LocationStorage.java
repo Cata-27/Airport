@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,17 @@ public class LocationStorage {
             return null;
         }
     }
-
-    public List<Location> getAll() {
+    
+     public Location getLocation(int id) {
+        for (Location location : this.locationList) {
+            if (location.getId() == id) {
+                return location;
+            }
+        }
+        return null;
+    }
+    
+    public List<Location> getLocationList() {
         return new ArrayList<>(locationList);
     }
 
@@ -66,5 +76,20 @@ public class LocationStorage {
         locationList.add(location);
         System.out.println("Ubicación registrada (no guardada aún en archivo): " + location.getAirportId());
         return true;
+    }
+    
+    public boolean delLocation(int id) {
+        Iterator<Location> iterator = this.locationList.iterator();
+        while (iterator.hasNext()) {
+            Location location = iterator.next();
+            if (location.getId() == id) {
+                iterator.remove(); // Elimina el elemento de forma segura
+                return true; // Encontrado y eliminado
+            }
+        }
+        return false; // No se encontró ninguna ubicación con ese ID
+    }
+    public boolean addLocation(Location location) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
