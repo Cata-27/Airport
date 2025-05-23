@@ -1385,7 +1385,7 @@
                                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="555" max="32767" attributes="0"/>
+                          <EmptySpace pref="552" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1616,7 +1616,7 @@
                               <Component id="jComboBox5" min="-2" max="-2" attributes="0"/>
                               <Component id="jTextField28" min="-2" pref="130" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="829" max="32767" attributes="0"/>
+                          <EmptySpace pref="827" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>

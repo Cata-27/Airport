@@ -10,6 +10,7 @@ import core.models.Passenger;
 import core.models.Plane;
 import com.formdev.flatlaf.FlatDarkLaf;
 import core.controllers.FlightController;
+import core.controllers.LocationController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
 import core.controllers.utils.Response;
@@ -1534,6 +1535,19 @@ public class AirportFrame extends javax.swing.JFrame {
         String country = AirportCountryLocationTxt.getText();
         String latitude = AirportLatitudeLocationTxt.getText();
         String longitude = AirportLogitudeLocationTxt.getText();
+        Response response = LocationController.createLocation(id, name, city, country, latitude, longitude);
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Avión creado correctamente", JOptionPane.INFORMATION_MESSAGE);
+            IdAirplaneTxt.setText("");
+            BrandAirplaneTxt.setText("");
+            ModelAirplaneTxt.setText("");
+            MaxCapacityAirplaneTxt.setText("");
+            AirlineAirplaneTxt.setText("");
+        }
 
 //        this.locations.add(new Location(id, name, city, country, latitude, longitude));
 //
