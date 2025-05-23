@@ -171,21 +171,27 @@ public class FlightController {
                     || (Objects.nonNull(minutesDurationsScaleStr) && !minutesDurationsScaleStr.trim().isEmpty())) {
                 return new Response("Both hours and minutes for scale duration must be provided or both empty", Status.BAD_REQUEST);
             }
+            int hoursDurationScale = 0;
+            int minutesDurationScale = 0;
+            int hoursDurationArrival = 0;
+            int minutesDurationArrival =0;
+            Flight newFlight = new Flight(
+                    id,
+                    planeId,
+                    departureLocationId,
+                    scaleLocationId, // Orden de scaleLocationId y arrivalLocationId según tu ejemplo
+                    arrivalLocationId,
+                    departureDateTime,
+                    hoursDurationArrival,
+                    minutesDurationArrival,
+                    hoursDurationScale,
+                    minutesDurationScale
+            );
 
-//            Flight newFlight = new Flight(
-//                    Id, // String id (usa idStr directamente)
-//                    plane, // Objeto Plane (ya obtenido de Storage)
-//                    departureLocation, // Objeto Location de salida (ya obtenido de Storage)
-//                    arrivalLocation, // Objeto Location de llegada (ya obtenido de Storage)
-//                    departureDateTime, // LocalDateTime departureDate
-//                    hoursDurationsArrival, // int hoursDurationArrival
-//                    minutesDurationsArrival // int minutesDurationArrival
-//            );
-//
-//            if (!storage.addFlight(newFlight)) {
-//                return new Response("A flight with that ID already exists", Status.BAD_REQUEST);
-//            }
 
+            if (!storage.addFlight(newFlight)) {
+                return new Response("A flight with that ID already exists", Status.BAD_REQUEST);
+            }
             return new Response("Flight created successfully", Status.CREATED);
 
         } catch (Exception ex) {
@@ -237,8 +243,6 @@ public class FlightController {
             LocalDateTime departureDateTime;
 
             FlightStorage storage = FlightStorage.getInstance();
-
-            // --- 1. Validación y parseo de ID de Vuelo (para encontrar el vuelo a actualizar) ---
             try {
                 id = Long.parseLong(idStr);
                 if (id < 0) {
@@ -248,15 +252,10 @@ public class FlightController {
                 return new Response("Flight ID must be numeric", Status.BAD_REQUEST);
             }
 
-            Flight existingFlight = storage.getFlight(id);
+            Flight existingFlight = storage.getFlightById(idStr);
             if (existingFlight == null) {
                 return new Response("Flight not found", Status.NOT_FOUND);
             }
-
-            // --- El resto de las validaciones y parseo son IDÉNTICAS a createFlight, pero se aplican
-            //     a los nuevos valores proporcionados. Si una validación falla, se retorna el error.
-            //     Luego, si todo es válido, se actualizan los setters del 'existingFlight'. ---
-            // --- 2. Validación y parseo de ID de Avión ---
             try {
                 planeId = Long.parseLong(planeIdStr);
                 if (planeId < 0) {
@@ -269,8 +268,6 @@ public class FlightController {
             } catch (NumberFormatException ex) {
                 return new Response("Plane ID must be numeric", Status.BAD_REQUEST);
             }
-
-            // --- 3. Validación y parseo de IDs de Ubicación (Salida, Llegada, Escala) ---
             try {
                 departureLocationId = Integer.parseInt(departureLocationIdStr);
                 if (departureLocationId < 0) {
@@ -318,8 +315,6 @@ public class FlightController {
                     return new Response("Scale location ID must be numeric or empty", Status.BAD_REQUEST);
                 }
             }
-
-            // --- 4. Validación y parseo de Fecha y Hora de Salida ---
             try {
                 year = Integer.parseInt(yearStr);
                 month = Integer.parseInt(monthStr);
@@ -354,8 +349,6 @@ public class FlightController {
             } catch (DateTimeParseException ex) {
                 return new Response("Invalid departure date/time provided. Please check values.", Status.BAD_REQUEST);
             }
-
-            // --- 5. Validación y parseo de Duración de Llegada ---
             try {
                 hoursDurationsArrival = Integer.parseInt(hoursDurationsArrivalStr);
                 minutesDurationsArrival = Integer.parseInt(minutesDurationsArrivalStr);
@@ -369,8 +362,6 @@ public class FlightController {
             } catch (NumberFormatException ex) {
                 return new Response("Arrival duration components must be numeric", Status.BAD_REQUEST);
             }
-
-            // --- 6. Validación y parseo de Duración de Escala (Opcional) ---
             if (Objects.nonNull(hoursDurationsScaleStr) && !hoursDurationsScaleStr.trim().isEmpty()
                     && Objects.nonNull(minutesDurationsScaleStr) && !minutesDurationsScaleStr.trim().isEmpty()) {
                 try {
@@ -390,17 +381,6 @@ public class FlightController {
                     || (Objects.nonNull(minutesDurationsScaleStr) && !minutesDurationsScaleStr.trim().isEmpty())) {
                 return new Response("Both hours and minutes for scale duration must be provided or both empty", Status.BAD_REQUEST);
             }
-
-            // --- Actualización de los datos del Vuelo existente ---
-//            existingFlight.setPlaneId(planeId);
-//            existingFlight.setDepartureLocationId(departureLocationId);
-//            existingFlight.setArrivalLocationId(arrivalLocationId);
-//            existingFlight.setScaleLocationId(scaleLocationId); // Puede ser null
-//            existingFlight.setDepartureDateTime(departureDateTime);
-//            existingFlight.setArrivalDurationHours(hoursDurationsArrival);
-//            existingFlight.setArrivalDurationMinutes(minutesDurationsArrival);
-//            existingFlight.setScaleDurationHours(hoursDurationsScale); // Puede ser null
-//            existingFlight.setScaleDurationMinutes(minutesDurationsScale); // Puede ser null
             return new Response("Flight data updated successfully", Status.OK);
 
         } catch (Exception ex) {
@@ -408,6 +388,7 @@ public class FlightController {
         }
     }
 
+    
     public static Response deleteFlight(String idStr) {
         try {
             long id;

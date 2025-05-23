@@ -3,7 +3,9 @@ package core.controllers;
 
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.Flight;
 import core.models.Location;
+import core.models.storage.FlightStorage;
 import core.models.storage.LocationStorage;
 import java.util.Collections;
 import java.util.List;
@@ -192,6 +194,75 @@ public class LocationController {
 
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+        
+    public static Response delayFlight(String flightIdStr, String hoursDelayStr, String minutesDelayStr) {
+        // Declara variables para los valores parseados
+        int hoursDelay;
+        int minutesDelay;
+
+        // Obtener la instancia del Storage.
+        // Ahora el controlador interactúa directamente con el Storage.
+        FlightStorage storage;
+        try {
+            storage = FlightStorage.getInstance(); // Tu getInstance() puede lanzar Exception
+        } catch (Exception e) {
+            return new Response("Error accessing FlightStorage: " + e.getMessage(), Status.INTERNAL_SERVER_ERROR);
+        }
+
+        // 1. Validar si flightIdStr es null o vacío ANTES de intentar usar trim() o matches()
+        if (Objects.isNull(flightIdStr) || flightIdStr.trim().isEmpty()) {
+            return new Response("Flight ID cannot be empty.", Status.BAD_REQUEST);
+        }
+
+        // Ahora que sabemos que flightIdStr no es null ni vacío, podemos usar trim() y matches()
+        String trimmedFlightId = flightIdStr.trim(); // Crea una variable para el ID limpio
+
+        if (!trimmedFlightId.matches("^[A-Z]{3}\\d{3}$")) {
+            return new Response("Flight ID must follow the format XXXYYY (3 uppercase letters and 3 digits)", Status.BAD_REQUEST);
+        }
+
+        // 2. Buscar el vuelo en el Storage
+        // ¡¡¡AQUÍ ESTÁ LA CORRECCIÓN!!! Cambiar getFlight por getFlightById
+        Flight flightToDelay = storage.getFlightById(trimmedFlightId);
+        if (flightToDelay == null) {
+            return new Response("Flight with ID " + trimmedFlightId + " not found.", Status.NOT_FOUND);
+        }
+
+        // 3. Validar y parsear las horas y minutos de retraso
+        try {
+            hoursDelay = Integer.parseInt(hoursDelayStr);
+            minutesDelay = Integer.parseInt(minutesDelayStr);
+
+            if (hoursDelay < 0 || minutesDelay < 0 || minutesDelay > 59) {
+                return new Response("Delay hours must be non-negative and minutes between 0-59.", Status.BAD_REQUEST);
+            }
+            if (hoursDelay == 0 && minutesDelay == 0) {
+                return new Response("Delay duration cannot be zero.", Status.BAD_REQUEST);
+            }
+
+        } catch (NumberFormatException e) {
+            return new Response("Delay time must be numeric", Status.BAD_REQUEST);
+        }
+
+        // 4. Aplicar el retraso al vuelo
+        try {
+            flightToDelay.delay(hoursDelay, minutesDelay);
+
+            // Opcional pero recomendado: persistir el cambio si tu almacenamiento es a disco (JSON)
+            // Tu FlightStorage tiene un método updateFlight, lo que sugiere que necesitas llamarlo
+            // para guardar el cambio en el archivo JSON.
+            if (!storage.updateFlight(flightToDelay)) {
+                // Esto podría ocurrir si el vuelo se eliminó justo antes de intentar actualizarlo
+                return new Response("Failed to save updated flight (ID not found during update).", Status.INTERNAL_SERVER_ERROR);
+            }
+
+
+            return new Response("Flight " + trimmedFlightId + " delayed successfully by " + hoursDelay + " hours and " + minutesDelay + " minutes.", Status.OK, flightToDelay);
+
+        } catch (Exception e) {
+            return new Response("Error delaying flight: " + e.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }
     }
 

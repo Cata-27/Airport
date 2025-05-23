@@ -11,6 +11,7 @@ import core.models.Plane;
 import com.formdev.flatlaf.FlatDarkLaf;
 import core.controllers.FlightController;
 import core.controllers.PassengerController;
+import core.controllers.PlaneController;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import java.awt.Color;
@@ -1503,12 +1504,26 @@ public class AirportFrame extends javax.swing.JFrame {
         String id = IdAirplaneTxt.getText();
         String brand = BrandAirplaneTxt.getText();
         String model = ModelAirplaneTxt.getText();
-        int maxCapacity = Integer.parseInt(MaxCapacityAirplaneTxt.getText());
+        String maxCapacity = MaxCapacityAirplaneTxt.getText();
         String airline = AirlineAirplaneTxt.getText();
+        Response response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
 
-        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Avión creado correctamente", JOptionPane.INFORMATION_MESSAGE);
+            IdAirplaneTxt.setText("");
+            BrandAirplaneTxt.setText("");
+            ModelAirplaneTxt.setText("");
+            MaxCapacityAirplaneTxt.setText("");
+            AirlineAirplaneTxt.setText("");
+        }
 
-        this.PlaneFlightCombo.addItem(id);
+//        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+//
+//        this.PlaneFlightCombo.addItem(id);
     }//GEN-LAST:event_CreateAirplaneBtnActionPerformed
 
     private void CreateLocationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateLocationBtnActionPerformed
@@ -1517,14 +1532,14 @@ public class AirportFrame extends javax.swing.JFrame {
         String name = AirportNameLocationTxt.getText();
         String city = AirportCityLocationTxt.getText();
         String country = AirportCountryLocationTxt.getText();
-        double latitude = Double.parseDouble(AirportLatitudeLocationTxt.getText());
-        double longitude = Double.parseDouble(AirportLogitudeLocationTxt.getText());
+        String latitude = AirportLatitudeLocationTxt.getText();
+        String longitude = AirportLogitudeLocationTxt.getText();
 
-        this.locations.add(new Location(id, name, city, country, latitude, longitude));
-
-        this.DepertureLocationFlightCombo.addItem(id);
-        this.ArrivalLocationFlightCombo.addItem(id);
-        this.ScaleLocationFlightCombo.addItem(id);
+//        this.locations.add(new Location(id, name, city, country, latitude, longitude));
+//
+//        this.DepertureLocationFlightCombo.addItem(id);
+//        this.ArrivalLocationFlightCombo.addItem(id);
+//        this.ScaleLocationFlightCombo.addItem(id);
     }//GEN-LAST:event_CreateLocationBtnActionPerformed
 
     private void CreateFlightBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateFlightBtnActionPerformed
@@ -1552,7 +1567,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 hoursDurationsArrival, minutesDurationsArrival,
                 hoursDurationsScale, minutesDurationsScale
         );
-        if (response.getStatus() == Status.CREATED) { 
+        if (response.getStatus() == Status.CREATED) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Vuelo Registrado", JOptionPane.INFORMATION_MESSAGE);
             IdFlightTxt.setText("");
             DepertureDateFlightTxt.setText("");
@@ -1566,33 +1581,11 @@ public class AirportFrame extends javax.swing.JFrame {
             DepertureDateMinuteFlightCombo.setSelectedIndex(0);
             ArrivalDurationFlightHourCombo.setSelectedIndex(0);
             ArrivalDurationFlightMinuteCombo.setSelectedIndex(0);
-            ScaleDurationFlightHourCombo.setSelectedIndex(0); 
+            ScaleDurationFlightHourCombo.setSelectedIndex(0);
             ScaleDurationFlightMinuteCombo.setSelectedIndex(0);
 
         } else {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error de Registro de Vuelo", JOptionPane.ERROR_MESSAGE);
-        }
-
-        //departureDate = LocalDateTime.of(year, month, day, hour, minutes);
-        Plane plane = null;
-        for (Plane p : this.planes) {
-            if (planeId.equals(p.getId())) {
-                plane = p;
-            }
-        }
-        Location departure = null;
-        Location arrival = null;
-        Location scale = null;
-        for (Location location : this.locations) {
-            if (departureLocationId.equals(location.getAirportId())) {
-                departure = location;
-            }
-            if (arrivalLocationId.equals(location.getAirportId())) {
-                arrival = location;
-            }
-            if (scaleLocationId.equals(location.getAirportId())) {
-                scale = location;
-            }
         }
 
 //        if (scale == null) {
@@ -1659,18 +1652,24 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void DelayFlightBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelayFlightBtnActionPerformed
         // TODO add your handling code here:
-        String flightId = IdDelayCombo.getItemAt(IdDelayCombo.getSelectedIndex());
-        int hours = Integer.parseInt(HourDelayCombo.getItemAt(HourDelayCombo.getSelectedIndex()));
-        int minutes = Integer.parseInt(MinuteDelayCombo.getItemAt(MinuteDelayCombo.getSelectedIndex()));
+        String flightIdStr = (String) IdDelayCombo.getSelectedItem();
+        String hoursDelayStr = (String) HourDelayCombo.getSelectedItem();
+        String minutesDelayStr = (String) MinuteDelayCombo.getSelectedItem();
 
-        Flight flight = null;
-        for (Flight f : this.flights) {
-            if (flightId.equals(f.getId())) {
-                flight = f;
-            }
-        }
+        Response response = FlightController.delayFlight(
+                flightIdStr,
+                hoursDelayStr,
+                minutesDelayStr
+        );
 
-        flight.delay(hours, minutes);
+//        Flight flight = null;
+//        for (Flight f : this.flights) {
+//            if (flightId.equals(f.getId())) {
+//                flight = f;
+//            }
+//        }
+//
+//        flight.delay(hours, minutes);
     }//GEN-LAST:event_DelayFlightBtnActionPerformed
 
     private void RefreshShowMyFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowMyFlightsBtnActionPerformed

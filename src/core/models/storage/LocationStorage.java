@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class LocationStorage {
+
     private static LocationStorage instance;
     private final List<Location> locationList;
     private static final String FILE_NAME = "locations.json";
@@ -31,12 +32,12 @@ public class LocationStorage {
         for (int i = 0; i < data.length(); i++) {
             JSONObject obj = data.getJSONObject(i);
             Location loc = new Location(
-                obj.getString("airportId"),
-                obj.getString("airportName"),
-                obj.getString("airportCity"),
-                obj.getString("airportCountry"),
-                obj.getDouble("airportLatitude"),
-                obj.getDouble("airportLongitude")
+                    obj.getString("airportId"),
+                    obj.getString("airportName"),
+                    obj.getString("airportCity"),
+                    obj.getString("airportCountry"),
+                    obj.getDouble("airportLatitude"),
+                    obj.getDouble("airportLongitude")
             );
             locationList.add(loc);
         }
@@ -53,8 +54,8 @@ public class LocationStorage {
             return null;
         }
     }
-    
-     public Location getLocation(int id) {
+
+    public Location getLocation(int id) {
         for (Location location : this.locationList) {
             if (location.getId() == id) {
                 return location;
@@ -62,7 +63,7 @@ public class LocationStorage {
         }
         return null;
     }
-    
+
     public List<Location> getLocationList() {
         return new ArrayList<>(locationList);
     }
@@ -77,7 +78,7 @@ public class LocationStorage {
         System.out.println("Ubicación registrada (no guardada aún en archivo): " + location.getAirportId());
         return true;
     }
-    
+
     public boolean delLocation(int id) {
         Iterator<Location> iterator = this.locationList.iterator();
         while (iterator.hasNext()) {
@@ -89,6 +90,17 @@ public class LocationStorage {
         }
         return false; // No se encontró ninguna ubicación con ese ID
     }
+
+//    public boolean updateLocation(Location updated) {
+//        for (int i = 0; i < locationList.size(); i++) {
+//            if (locationList.get(i).getid().equals(updated.getid())) {
+//                locationList.set(i, updated); // Reemplaza la ubicación antigua por la nueva
+//                return true; // Se encontró y actualizó
+//            }
+//        }
+//        return false; // No se encontró una ubicación con ese ID
+//    }
+
     public boolean addLocation(Location location) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

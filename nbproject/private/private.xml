@@ -6,11 +6,11 @@
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/views/AirportFrame.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/controllers/LocationController.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/controllers/PlaneController.java</file>
-            <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/storage/PlaneStorage.java</file>
-            <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/storage/LocationStorage.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/controllers/FlightController.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/Flight.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/storage/FlightStorage.java</file>
+            <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/storage/PlaneStorage.java</file>
+            <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/models/storage/LocationStorage.java</file>
             <file>file:/C:/Users/ASUS-E1504F/Documents/GitHub/Airport/src/core/controllers/PassengerController.java</file>
         </group>
     </open-files>
