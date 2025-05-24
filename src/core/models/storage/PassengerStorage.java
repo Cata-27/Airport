@@ -1,56 +1,42 @@
 package core.models.storage;
 
 import core.models.Passenger;
-import core.models.Plane;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PassengerStorage {
+    private static List<Passenger> passengers = new ArrayList<>();
 
-    private static PassengerStorage instance;  // Singleton
-    private List<Passenger> passengers;
-    private final String FILENAME = "../json/passengers.json";
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-
-    // Constructor privado (Singleton)
-    private PassengerStorage() throws Exception {
-        passengers = new ArrayList<>();
-        loadPassengersFromJson();
-    }
-
-    //  Método para obtener la instancia única
-    public static PassengerStorage getInstance() throws Exception {
-        if (instance == null) {
-            instance = new PassengerStorage();
-        }
-        return instance;
-    }
-
-    //  Cargar pasajeros desde archivo JSON
-    private void loadPassengersFromJson() throws Exception {
-        JSONArray array = JsonManager.leerArregloJson(FILENAME);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject json = array.getJSONObject(i);
-            Passenger p = new Passenger(
+    public static void loadFromJson(String filePath) {
+        try (FileReader reader = new FileReader(filePath)) {
+            JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = jsonArray.getJSONObject(i);
+                Passenger passenger = new Passenger(
                     json.getLong("id"),
                     json.getString("firstname"),
                     json.getString("lastname"),
-                    LocalDate.parse(json.getString("birthDate"), FORMATTER),
+                    LocalDate.parse(json.getString("birthDate")),
                     json.getInt("countryPhoneCode"),
                     json.getLong("phone"),
                     json.getString("country")
-            );
-            passengers.add(p);
+                );
+                passengers.add(passenger);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar pasajeros: " + e.getMessage());
         }
     }
 
-    public Passenger getById(long id) {
+    public static void save(Passenger passenger) {
+        passengers.add(passenger);
+    }
+
+    public static Passenger findById(long id) {
         for (Passenger p : passengers) {
             if (p.getId() == id) {
                 return p;
@@ -59,27 +45,8 @@ public class PassengerStorage {
         return null;
     }
 
-    public List<Passenger> getAll() {
-        return new ArrayList<>(passengers); 
+    public static List<Passenger> getAll() {
+        passengers.sort((p1, p2) -> Long.compare(p1.getId(), p2.getId()));
+        return new ArrayList<>(passengers);
     }
-
-    public boolean add(Passenger p) {
-        if (getById(p.getId()) == null) { 
-            passengers.add(p);
-            System.out.println("Pasajero agregado: " + p.getFirstname());
-            return true;
-        } else {
-            System.out.println("Ya existe un pasajero con el ID: " + p.getId());
-            return false;
-        }
-    }
-
-    public Plane getPlane(long idLong) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public boolean delPlane(long idLong) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }

@@ -3,93 +3,48 @@ package core.models.storage;
 import core.models.Location;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public class LocationStorage {
+    private static List<Location> locations = new ArrayList<>();
 
-    private static LocationStorage instance;
-    private final List<Location> locationList;
-    private static final String FILE_NAME = "locations.json";
-
-    private LocationStorage() throws Exception {
-        this.locationList = new ArrayList<>();
-        loadLocations();
+    public static void loadFromJson(String filePath) {
+        try (FileReader reader = new FileReader(filePath)) {
+            JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = jsonArray.getJSONObject(i);
+                Location location = new Location(
+                    json.getString("airportId"),
+                    json.getString("airportName"),
+                    json.getString("airportCity"),
+                    json.getString("airportCountry"),
+                    json.getDouble("airportLatitude"),
+                    json.getDouble("airportLongitude")
+                );
+                locations.add(location);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar ubicaciones: " + e.getMessage());
+        }
     }
 
-    public static LocationStorage getInstance() throws Exception {
-        if (instance == null) {
-            instance = new LocationStorage();
-        }
-        return instance;
-    }
-
-    private void loadLocations() throws Exception {
-        JSONArray data = JsonManager.leerArregloJson(FILE_NAME);
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject obj = data.getJSONObject(i);
-            Location loc = new Location(
-                    obj.getString("airportId"),
-                    obj.getString("airportName"),
-                    obj.getString("airportCity"),
-                    obj.getString("airportCountry"),
-                    obj.getDouble("airportLatitude"),
-                    obj.getDouble("airportLongitude")
-            );
-            locationList.add(loc);
-        }
+    public static void save(Location location) {
+        locations.add(location);
     }
 
     public static Location findById(String airportId) {
-        try {
-            return getInstance().locationList.stream()
-                    .filter(loc -> loc.getAirportId().equals(airportId))
-                    .findFirst()
-                    .orElse(null);
-        } catch (Exception e) {
-            System.err.println("Error al buscar ubicación: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public Location getLocation(int id) {
-        for (Location location : this.locationList) {
-            if (location.getAirportId() == id) {
-                return location;
+        for (Location loc : locations) {
+            if (loc.getAirportId().equals(airportId)) {
+                return loc;
             }
         }
         return null;
     }
 
-    public List<Location> getLocationList() {
-        return new ArrayList<>(locationList);
+    public static List<Location> getAll() {
+        locations.sort((loc1, loc2) -> loc1.getAirportId().compareTo(loc2.getAirportId()));
+        return new ArrayList<>(locations);
     }
-
-    public boolean registerLocation(Location location) {
-        if (findById(location.getAirportId()) != null) {
-            System.err.println("Ya existe una ubicación con el ID: " + location.getAirportId());
-            return false;
-        }
-
-        locationList.add(location);
-        System.out.println("Ubicación registrada (no guardada aún en archivo): " + location.getAirportId());
-        return true;
-    }
-
-    public boolean delLocation(int id) {
-        Iterator<Location> iterator = this.locationList.iterator();
-        while (iterator.hasNext()) {
-            Location location = iterator.next();
-            if (location.getAirportId() == id) {
-                iterator.remove(); // Elimina el elemento de forma segura
-                return true; // Encontrado y eliminado
-            }
-        }
-        return false; // No se encontró ninguna ubicación con ese ID
-    }
-
-
 }
