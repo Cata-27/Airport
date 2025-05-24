@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class LocationController {
+    
     public static Response createLocation(String id, String city, String name, String country, String latitude, String longitude) {
         try {
             int idInt;

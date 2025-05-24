@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationStorage {
+
     private static List<Location> locations = new ArrayList<>();
+    private static LocationStorage instance;
 
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
@@ -16,12 +18,12 @@ public class LocationStorage {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
                 Location location = new Location(
-                    json.getString("airportId"),
-                    json.getString("airportName"),
-                    json.getString("airportCity"),
-                    json.getString("airportCountry"),
-                    json.getDouble("airportLatitude"),
-                    json.getDouble("airportLongitude")
+                        json.getString("airportId"),
+                        json.getString("airportName"),
+                        json.getString("airportCity"),
+                        json.getString("airportCountry"),
+                        json.getDouble("airportLatitude"),
+                        json.getDouble("airportLongitude")
                 );
                 locations.add(location);
             }
@@ -30,8 +32,45 @@ public class LocationStorage {
         }
     }
 
+    public static LocationStorage getInstance() {
+        if (instance == null) {
+            instance = new LocationStorage();
+        }
+        return instance;
+    }
+
     public static void save(Location location) {
         locations.add(location);
+    }
+
+    public boolean addLocation(Location Location) {
+        for (Location p : this.locations) {
+            if (p.getAirportId() == Location.getAirportId()) {
+
+                return false;
+            }
+        }
+        this.locations.add(Location);
+        return true;
+    }
+
+    public Location getLocation(int id) {
+        for (Location location : this.locations) {
+            if (location.getAirportId().equals(id)) {
+                return location;
+            }
+        }
+        return null;
+    }
+    
+    public boolean delLocation(int id) {
+        for (Location location : this.locations) {
+            if (location.getAirportId().equals(id)) {
+                this.locations.remove(location);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Location findById(String airportId) {

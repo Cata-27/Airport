@@ -1,6 +1,7 @@
 package core.models.storage;
 
 import core.models.Passenger;
+import core.models.Plane;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileReader;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class PassengerStorage {
     private static List<Passenger> passengers = new ArrayList<>();
-
+    private static PassengerStorage instance;
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
@@ -31,7 +32,12 @@ public class PassengerStorage {
             System.err.println("Error al cargar pasajeros: " + e.getMessage());
         }
     }
-
+    public static PassengerStorage getInstance() {
+        if (instance == null) {
+            instance = new PassengerStorage();
+        }
+        return instance;
+    }
     public static void save(Passenger passenger) {
         passengers.add(passenger);
     }
@@ -48,5 +54,13 @@ public class PassengerStorage {
     public static List<Passenger> getAll() {
         passengers.sort((p1, p2) -> Long.compare(p1.getId(), p2.getId()));
         return new ArrayList<>(passengers);
+    }
+
+    public Plane getPlane(long idLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean delPlane(long idLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

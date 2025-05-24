@@ -73,13 +73,7 @@ public class PassengerController {
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
-
-//            Storage storage = Storage.getInstance();
-//            // Changed from Person to Plane
-//            if (!storage.addPlane(new Plane(idLong, firstName, lastName, yearInt, monthInt, dayInt, countryCode, phoneCodeInt, phoneLong, country))) {
-//                return new Response("A plane with that ID already exists", Status.BAD_REQUEST);
-//            }
-            return new Response("Plane created successfully", Status.CREATED);
+            return new Response("Passenger created successfully", Status.CREATED);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }
