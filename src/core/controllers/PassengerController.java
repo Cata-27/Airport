@@ -103,7 +103,7 @@ public class PassengerController {
         }
     }
 
-    public static Response updatePlane(String id, String firstName, String lastName, String year, String month, String day, String countryCode, String phoneCode, String phone, String country) {
+    public static Response updatePassenger(String id, String firstName, String lastName, String year, String month, String day, String countryCode, String phoneCode, String phone, String country) {
         try {
             long idLong;
             int yearInt, monthInt, dayInt, phoneCodeInt;
@@ -174,17 +174,17 @@ public class PassengerController {
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
-
-            // Update Plane object attributes
-//            plane.setFirstName(firstName);
-//            plane.setLastName(lastName);
-//            plane.setYear(yearInt);
-//            plane.setMonth(monthInt);
-//            plane.setDay(dayInt);
-//            plane.setCountryCode(countryCode);
-//            plane.setPhoneCode(phoneCodeInt);
-//            plane.setPhone(phoneLong);
-//            plane.setCountry(country);
+//
+//            //Update Plane object attributes
+//            passenger.setFirstName(firstName);
+//            passenger.setLastName(lastName);
+//            passenger.setYear(yearInt);
+//            passenger.setMonth(monthInt);
+//            passenger.setDay(dayInt);
+//            passenger.setCountryCode(countryCode);
+//            passenger.setPhoneCode(phoneCodeInt);
+//            passenger.setPhone(phoneLong);
+//            passenger.setCountry(country);
 
             return new Response("Plane data updated successfully", Status.OK);
         } catch (Exception ex) {

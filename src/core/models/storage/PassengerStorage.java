@@ -55,7 +55,7 @@ public class PassengerStorage {
         passengers.sort((p1, p2) -> Long.compare(p1.getId(), p2.getId()));
         return new ArrayList<>(passengers);
     }
-
+    
     public Plane getPlane(long idLong) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
