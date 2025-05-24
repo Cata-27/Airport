@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public class Plane {
     
     private final String id;
-    private String brand;
-    private String model;
+    private final String brand;
+    private final String model;
     private final int maxCapacity;
-    private String airline;
-    private ArrayList<Flight> flights;
+    private final String airline;
+    private final ArrayList<Flight> flights;
 
     public Plane(String id, String brand, String model, int maxCapacity, String airline) {
         this.id = id;

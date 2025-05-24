@@ -4,6 +4,10 @@
  */
 package core.models;
 
+import core.models.storage.FlightStorage;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author edangulo
@@ -11,11 +15,11 @@ package core.models;
 public class Location {
     
     private final String airportId;
-    private String airportName;
-    private String airportCity;
-    private String airportCountry;
-    private double airportLatitude;
-    private double airportLongitude;
+    private final String airportName;
+    private final String airportCity;
+    private final String airportCountry;
+    private final double airportLatitude;
+    private final double airportLongitude;
 
     public Location(String airportId, String airportName, String airportCity, String airportCountry, double airportLatitude, double airportLongitude) {
         this.airportId = airportId;
@@ -25,7 +29,6 @@ public class Location {
         this.airportLatitude = airportLatitude;
         this.airportLongitude = airportLongitude;
     }
-
     public String getAirportId() {
         return airportId;
     }
@@ -50,8 +53,4 @@ public class Location {
         return airportLongitude;
     }
 
-    public int getId() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
 }

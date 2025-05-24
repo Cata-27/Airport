@@ -1,4 +1,3 @@
-
 package core.models.storage;
 
 import java.io.BufferedReader;
@@ -43,5 +42,3 @@ public class JsonManager {
         }
     }
 }
-
-

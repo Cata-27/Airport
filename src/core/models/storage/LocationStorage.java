@@ -57,7 +57,7 @@ public class LocationStorage {
 
     public Location getLocation(int id) {
         for (Location location : this.locationList) {
-            if (location.getId() == id) {
+            if (location.getAirportId() == id) {
                 return location;
             }
         }
@@ -83,7 +83,7 @@ public class LocationStorage {
         Iterator<Location> iterator = this.locationList.iterator();
         while (iterator.hasNext()) {
             Location location = iterator.next();
-            if (location.getId() == id) {
+            if (location.getAirportId() == id) {
                 iterator.remove(); // Elimina el elemento de forma segura
                 return true; // Encontrado y eliminado
             }
@@ -91,17 +91,5 @@ public class LocationStorage {
         return false; // No se encontró ninguna ubicación con ese ID
     }
 
-//    public boolean updateLocation(Location updated) {
-//        for (int i = 0; i < locationList.size(); i++) {
-//            if (locationList.get(i).getid().equals(updated.getid())) {
-//                locationList.set(i, updated); // Reemplaza la ubicación antigua por la nueva
-//                return true; // Se encontró y actualizó
-//            }
-//        }
-//        return false; // No se encontró una ubicación con ese ID
-//    }
 
-    public boolean addLocation(Location location) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

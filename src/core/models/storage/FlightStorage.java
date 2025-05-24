@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class FlightStorage {
 
     private static FlightStorage instance;
-    private List<Flight> flights;
+    private final List<Flight> flights;
     private static final String FILE_NAME = "flights.json";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 

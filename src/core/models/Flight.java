@@ -4,6 +4,9 @@
  */
 package core.models;
 
+import core.models.Location;
+import core.models.Passenger;
+import core.models.Plane;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -14,21 +17,19 @@ import java.util.ArrayList;
 public class Flight {
     
     private final String id;
-    private ArrayList<Passenger> passengers;
-    private Plane plane;
-    private Location departureLocation;
+    private final ArrayList<Passenger> passengers;
+    private final Plane plane;
+    private final Location departureLocation;
     private Location scaleLocation;
-    private Location arrivalLocation;
+    private final Location arrivalLocation;
     private LocalDateTime departureDate;
-    private int hoursDurationArrival;
-    private int minutesDurationArrival;
+    private final int hoursDurationArrival;
+    private final int minutesDurationArrival;
     private int hoursDurationScale;
     private int minutesDurationScale;
     
 
-    public Flight(String id, Plane plane, 
-            Location departureLocation, Location arrivalLocation, LocalDateTime departureDate, 
-            int hoursDurationArrival, int minutesDurationArrival) {
+    public Flight(String id, Plane plane, Location departureLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival) {
         this.id = id;
         this.passengers = new ArrayList<>();
         this.plane = plane;
@@ -100,11 +101,6 @@ public class Flight {
     public Plane getPlane() {
         return plane;
     }
-
-    public void setDepartureDate(LocalDateTime departureDate) {
-        this.departureDate = departureDate;
-    }
-    
     public LocalDateTime calculateArrivalDate() {
         return departureDate.plusHours(hoursDurationScale).plusHours(hoursDurationArrival).plusMinutes(minutesDurationScale).plusMinutes(minutesDurationArrival);
     }
@@ -116,5 +112,11 @@ public class Flight {
     public int getNumPassengers() {
         return passengers.size();
     }
+
+    public ArrayList<Passenger> getPassengers() {
+        return passengers;
+    }
+    
+    
     
 }

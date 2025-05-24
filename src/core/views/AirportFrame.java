@@ -8,7 +8,6 @@ import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger;
 import core.models.Plane;
-import com.formdev.flatlaf.FlatDarkLaf;
 import core.controllers.FlightController;
 import core.controllers.LocationController;
 import core.controllers.PassengerController;
@@ -17,10 +16,8 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import java.awt.Color;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 /**
