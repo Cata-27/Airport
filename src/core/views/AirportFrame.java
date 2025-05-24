@@ -1435,6 +1435,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         jTabbedPane1.setEnabledAt(5, false);
         jTabbedPane1.setEnabledAt(6, false);
+        jTabbedPane1.setEnabledAt(7, false);
     }//GEN-LAST:event_administratorActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
@@ -1724,14 +1725,14 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshShowAllPassengersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPassengersBtnActionPerformed
         // TODO add your handling code here:
-        AllPassengerShowController controller = new AllPassengerShowController(allPassengersTable);
-        controller.refreshTable(); 
+//        AllPassegerShowController controller = new AllPassegerShowController(allPassengersTable);
+//        controller.refreshTable(); 
         
-        DefaultTableModel model = (DefaultTableModel) TablePassengers.getModel();
-        model.setRowCount(0);
-        for (Passenger passenger : this.passengers) {
-            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
-        }
+//        DefaultTableModel model = (DefaultTableModel) TablePassengers.getModel();
+//        model.setRowCount(0);
+//        for (Passenger passenger : this.passengers) {
+//            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
+//        }
     }//GEN-LAST:event_RefreshShowAllPassengersBtnActionPerformed
 
     private void RefreshShowAllFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllFlightsBtnActionPerformed
