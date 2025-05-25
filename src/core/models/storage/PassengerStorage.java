@@ -9,9 +9,32 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassengerStorage {
+public class PassengerStorage implements PrototypeCloneable<Passenger> {
     private static List<Passenger> passengers = new ArrayList<>();
     private static PassengerStorage instance;
+     //Implementación de PrototypeCloneable
+    @Override
+    public Passenger clone(Passenger original) {
+        if (original == null) return null;
+
+        Passenger copiedPassenger = new Passenger(
+            original.getId(),
+            original.getFirstname(),
+            original.getLastname(),
+            original.getBirthDate(),
+            original.getCountryPhoneCode(),
+            original.getPhone(),
+            original.getCountry()
+        );
+
+        // Clonar vuelos (usando FlightStorage para copias seguras)
+        original.getFlights().forEach(f -> 
+            copiedPassenger.addFlight(FlightStorage.getInstance().clone(f))
+        );
+
+        return copiedPassenger;
+    }
+    
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
@@ -29,7 +52,7 @@ public class PassengerStorage {
                 passengers.add(passenger);
             }
         } catch (Exception e) {
-            System.err.println("Error al cargar pasajeros: " + e.getMessage());
+            System.err.println("Error when loading passengers: " + e.getMessage());
         }
     }
     public static PassengerStorage getInstance() {

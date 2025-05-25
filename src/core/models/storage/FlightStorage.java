@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.io.FileReader;
 import java.util.Collections;
 
-public class FlightStorage {
+public class FlightStorage implements PrototypeCloneable<Flight> {
 
     private static List<Plane> planes = new ArrayList<>();
     private static List<Location> locations = new ArrayList<>();
@@ -89,6 +89,40 @@ public class FlightStorage {
             return new Response("Error delaying flight", Status.INTERNAL_SERVER_ERROR);
         }
     }
+    //Implementación de PrototypeCloneable
+    @Override
+    public Flight clone(Flight original) {
+        if (original == null) return null;
+
+        Flight copiedFlight;
+        if (original.getScaleLocation() == null) {
+            copiedFlight = new Flight(
+                original.getId(),
+                original.getPlane(),
+                original.getDepartureLocation(),
+                original.getArrivalLocation(),
+                original.getDepartureDate(),
+                original.getHoursDurationArrival(),
+                original.getMinutesDurationArrival()
+            );
+        } else {
+            copiedFlight = new Flight(
+                original.getId(),
+                original.getPlane(),
+                original.getDepartureLocation(),
+                original.getScaleLocation(),
+                original.getArrivalLocation(),
+                original.getDepartureDate(),
+                original.getHoursDurationArrival(),
+                original.getMinutesDurationArrival(),
+                original.getHoursDurationScale(),
+                original.getMinutesDurationScale()
+            );
+        }
+
+        original.getPassengers().forEach(copiedFlight::addPassenger);
+        return copiedFlight;
+    }
     
     // 5. Añadir pasajero a un vuelo
     public static void addPassengerToFlight(String flightId, Passenger passenger) {
@@ -141,7 +175,7 @@ public class FlightStorage {
                 flights.add(flight);
             }
         } catch (Exception e) {
-            System.err.println("Error al cargar vuelos desde JSON: " + e.getMessage());
+            System.err.println("Error loading flights from JSON: " + e.getMessage());
         }
     }
 
