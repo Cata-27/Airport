@@ -57,22 +57,29 @@ public class PlaneStorage {
         return instance;
     }
 
-    public boolean delPlane(int id) {
-        for (Plane plane : this.planes) {
-            if (plane.getId().equals(id)) {
-                this.planes.remove(plane);
-                return true;
-            }
+    public boolean delPlane(int id) { // Cambiar int a String
+        // Usar un iterador para eliminar elementos de una lista mientras se itera
+        // O usar removeIf para listas
+        return planes.removeIf(plane -> plane.getId().equals(id));
+        /*
+    // Alternativa con bucle tradicional si prefieres
+    for (Plane plane : this.planes) {
+        if (plane.getId().equals(id)) { // Usar .equals para Strings
+            this.planes.remove(plane);
+            return true;
         }
-        return false;
+    }
+    return false;
+         */
     }
 
-    public Plane getPlane(int id) { 
+    public Plane getPlane(int id) { // Cambiar int a String
         for (Plane plane : this.planes) {
-            if (plane.getId().equals(id)) { 
+            if (plane.getId().equals(id)) { // Usar .equals para Strings
                 return plane;
             }
         }
         return null;
+
     }
 }

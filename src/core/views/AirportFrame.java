@@ -12,10 +12,10 @@ import core.controllers.FlightController;
 import core.controllers.LocationController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
+import core.controllers.Table.MyFlaightsShowController;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import java.awt.Color;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -217,7 +217,7 @@ public class AirportFrame extends javax.swing.JFrame {
         AddToFlightCombo = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        myFlightsTable = new javax.swing.JTable();
         RefreshShowMyFlightsBtn = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -1012,8 +1012,8 @@ public class AirportFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Add to flight", jPanel6);
 
-        jTable1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        myFlightsTable.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        myFlightsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -1039,7 +1039,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(myFlightsTable);
 
         RefreshShowMyFlightsBtn.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         RefreshShowMyFlightsBtn.setText("Refresh");
@@ -1706,28 +1706,42 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshShowMyFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowMyFlightsBtnActionPerformed
         // TODO add your handling code here:
-        long passengerId = Long.parseLong(userSelect.getItemAt(userSelect.getSelectedIndex()));
-
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == passengerId) {
-                passenger = p;
-            }
+        // 1. Obtener el ID del pasajero seleccionado de tu JComboBox (userSelect).
+        // Asegúrate de que el JComboBox 'userSelect' contenga los IDs de los pasajeros
+        // o si contiene objetos Passenger, obtener el ID de ese objeto.
+        String selectedPassengerId = null;
+        if (userSelect.getSelectedItem() != null) {
+            selectedPassengerId = userSelect.getSelectedItem().toString(); // O si el ID es un long, conviértelo a String si es necesario
         }
-
-        ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        for (Flight flight : flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
+        if (selectedPassengerId == null || selectedPassengerId.isEmpty()) {
+            System.out.println("Por favor, selecciona un pasajero para ver sus vuelos.");
+            return;
         }
+        MyFlaightsShowController controller = new MyFlaightsShowController(myFlightsTable, selectedPassengerId);
+        controller.refreshTable();
+
+//        long passengerId = Long.parseLong(userSelect.getItemAt(userSelect.getSelectedIndex()));
+//
+//        Passenger passenger = null;
+//        for (Passenger p : this.passengers) {
+//            if (p.getId() == passengerId) {
+//                passenger = p;
+//            }
+//        }
+//
+//        ArrayList<Flight> flights = passenger.getFlights();
+//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+//        model.setRowCount(0);
+//        for (Flight flight : flights) {
+//            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
+//        }
     }//GEN-LAST:event_RefreshShowMyFlightsBtnActionPerformed
 
     private void RefreshShowAllPassengersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPassengersBtnActionPerformed
         // TODO add your handling code here:
 //        AllPassegerShowController controller = new AllPassegerShowController(allPassengersTable);
 //        controller.refreshTable(); 
-        
+
 //        DefaultTableModel model = (DefaultTableModel) TablePassengers.getModel();
 //        model.setRowCount(0);
 //        for (Passenger passenger : this.passengers) {
@@ -1927,10 +1941,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
+    private javax.swing.JTable myFlightsTable;
     private core.views.PanelRound panelRound1;
     private core.views.PanelRound panelRound2;
     private core.views.PanelRound panelRound3;

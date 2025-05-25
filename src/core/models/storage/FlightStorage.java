@@ -13,6 +13,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileReader;
+import java.util.Collections;
 
 public class FlightStorage {
 
@@ -44,9 +45,16 @@ public class FlightStorage {
     }
 
     // 3. Obtener todos los vuelos ordenados por fecha (de más antiguo a más reciente)
-    public static List<Flight> getAll() {
-        flights.sort(Comparator.comparing(Flight::getDepartureDate));
-        return new ArrayList<>(flights); // Copia defensiva
+    public List<Flight> getAllFlights() {
+        List<Flight> sortedFlights = new ArrayList<>(this.flights);
+        Collections.sort(sortedFlights, new Comparator<Flight>() {
+            @Override
+            public int compare(Flight f1, Flight f2) {
+                return f1.getDepartureDate().compareTo(f2.getDepartureDate());
+            }
+        });
+
+        return sortedFlights;
     }
 
     public Response delayFlight(String flightId, String delayHours, String delayMinutes) {
