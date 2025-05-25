@@ -12,10 +12,19 @@ import core.controllers.FlightController;
 import core.controllers.LocationController;
 import core.controllers.PassengerController;
 import core.controllers.PlaneController;
+import core.controllers.Table.AllPassegerShowController;
+import core.controllers.Table.FlightsShowController;
+import core.controllers.Table.LocationsShowController;
 import core.controllers.Table.MyFlaightsShowController;
+import core.controllers.Table.PlaneShowController;
 import core.controllers.utils.Response;
 import core.controllers.utils.Status;
+import core.models.storage.FlightStorage;
+import core.models.storage.LocationStorage;
+import core.models.storage.PassengerStorage;
+import core.models.storage.PlaneStorage;
 import java.awt.Color;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +43,8 @@ public class AirportFrame extends javax.swing.JFrame {
     private ArrayList<Plane> planes;
     private ArrayList<Location> locations;
     private ArrayList<Flight> flights;
+    private MyFlaightsShowController myFlaightsShowController;
+    private FlightsShowController flightsShowController;
 
     public AirportFrame() {
         initComponents();
@@ -51,6 +62,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
+        myFlaightsShowController = new MyFlaightsShowController(myFlightsTable, "");
+        flightsShowController = new FlightsShowController(jTable3);
     }
 
     private void blockPanels() {
@@ -1705,75 +1718,40 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_DelayFlightBtnActionPerformed
 
     private void RefreshShowMyFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowMyFlightsBtnActionPerformed
-        // TODO add your handling code here:
-        // 1. Obtener el ID del pasajero seleccionado de tu JComboBox (userSelect).
-        // Asegúrate de que el JComboBox 'userSelect' contenga los IDs de los pasajeros
-        // o si contiene objetos Passenger, obtener el ID de ese objeto.
-        String selectedPassengerId = null;
-        if (userSelect.getSelectedItem() != null) {
-            selectedPassengerId = userSelect.getSelectedItem().toString(); // O si el ID es un long, conviértelo a String si es necesario
-        }
-        if (selectedPassengerId == null || selectedPassengerId.isEmpty()) {
-            System.out.println("Por favor, selecciona un pasajero para ver sus vuelos.");
-            return;
-        }
-        MyFlaightsShowController controller = new MyFlaightsShowController(myFlightsTable, selectedPassengerId);
-        controller.refreshTable();
 
-//        long passengerId = Long.parseLong(userSelect.getItemAt(userSelect.getSelectedIndex()));
-//
-//        Passenger passenger = null;
-//        for (Passenger p : this.passengers) {
-//            if (p.getId() == passengerId) {
-//                passenger = p;
-//            }
-//        }
-//
-//        ArrayList<Flight> flights = passenger.getFlights();
-//        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-//        model.setRowCount(0);
-//        for (Flight flight : flights) {
-//            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
-//        }
+    String selectedPassengerId = userSelect.getSelectedItem().toString();
+    FlightStorage.loadFromJson("json/flights.json");
+    myFlaightsShowController = new MyFlaightsShowController(myFlightsTable, selectedPassengerId);
+    myFlaightsShowController.refreshTable();
+//        
     }//GEN-LAST:event_RefreshShowMyFlightsBtnActionPerformed
 
     private void RefreshShowAllPassengersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPassengersBtnActionPerformed
-        // TODO add your handling code here:
-//        AllPassegerShowController controller = new AllPassegerShowController(allPassengersTable);
-//        controller.refreshTable(); 
+    // 1. Recargar los datos desde el JSON 
+    PassengerStorage.loadFromJson("json/passengers.json"); // ruta 
 
-//        DefaultTableModel model = (DefaultTableModel) TablePassengers.getModel();
-//        model.setRowCount(0);
-//        for (Passenger passenger : this.passengers) {
-//            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
-//        }
+    // 2. Actualizar la tabla
+    AllPassegerShowController controller = new AllPassegerShowController(TablePassengers);
+    controller.refreshTable();
+
     }//GEN-LAST:event_RefreshShowAllPassengersBtnActionPerformed
 
     private void RefreshShowAllFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllFlightsBtnActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
-        model.setRowCount(0);
-        for (Flight flight : this.flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
-        }
+    FlightsShowController controller = new FlightsShowController(jTable3);
+    controller.refreshTable();
+
     }//GEN-LAST:event_RefreshShowAllFlightsBtnActionPerformed
 
     private void RefreshShowAllPlanesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPlanesBtnActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
-        model.setRowCount(0);
-        for (Plane plane : this.planes) {
-            model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
-        }
+    PlaneStorage.loadFromJson("json/planes.json");
+    PlaneShowController controller = new PlaneShowController(jTable4);
+    controller.refreshTable();
     }//GEN-LAST:event_RefreshShowAllPlanesBtnActionPerformed
 
     private void RefreshShowAllLocationsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllLocationsBtnActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
-        model.setRowCount(0);
-        for (Location location : this.locations) {
-            model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
-        }
+    LocationStorage.loadFromJson("json/locations.json");
+    LocationsShowController controller = new LocationsShowController(jTable5);
+    controller.refreshTable();
     }//GEN-LAST:event_RefreshShowAllLocationsBtnActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed

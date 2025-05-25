@@ -31,19 +31,18 @@ public class FlightsShowController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Rellenar la tabla
-//        for (Flight flight : flights) {
-//            model.addRow(new Object[]{
-//                flight.getId(),
-//                flight.getPlane().getModel(),
-//                flight.getScaleLocation() != null ? flight.getScaleLocation(),
-//                flight.getDepartureDate().toLocalDate().format(dateFormatter),
-//                flight.getDepartureDate().toLocalTime().format(timeFormatter),
-//                flight.getHoursDurationArrival() + "h " + flight.getMinutesDurationArrival() + "m",
-//                flight.getScaleLocation() != null ? (flight.getHoursDurationScale() + "h " + flight.getMinutesDurationScale() + "m") : "N/A"
-//                // Añade todas las columnas relevantes de tu objeto Flight
-//            });
-//        }
+         //Rellenar la tabla
+       for (Flight flight : flights) {
+        model.addRow(new Object[]{
+        flight.getId(),
+        flight.getPlane().getModel(),
+        flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "-", // 
+        flight.getDepartureDate().toLocalDate().format(dateFormatter),
+        flight.getDepartureDate().toLocalTime().format(timeFormatter),
+        flight.getHoursDurationArrival() + "h " + flight.getMinutesDurationArrival() + "m",
+        flight.getScaleLocation() != null ? (flight.getHoursDurationScale() + "h " + flight.getMinutesDurationScale() + "m") : "N/A"
+    });
+}
     }
     
 }

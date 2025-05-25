@@ -28,14 +28,14 @@ public class LocationsShowController {
         List<Location> locations = LocationStorage.getInstance().getAll(); // Asume que getAll() devuelve copias ordenadas
 
 //        // Rellenar la tabla
-//        for (Location location : locations) {
-//            model.addRow(new Object[]{
-//                location.getAirportId(), // Asume que Location tiene getAirportId() como String
-//                location.getCity(),
-//                location.getCountry()
-//                // Añade todas las columnas relevantes de tu objeto Location
-//            });
-//        }
+       for (Location location : locations) {
+            model.addRow(new Object[]{
+                location.getAirportId(),
+                location.getAirportName(),
+                location.getAirportCity(),
+                location.getAirportCountry()
+           
+            });
+        }
     }
-    
 }

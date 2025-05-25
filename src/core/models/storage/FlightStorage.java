@@ -6,6 +6,7 @@ import core.models.Flight;
 import core.models.Location;
 import core.models.Passenger;
 import core.models.Plane;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -134,30 +135,35 @@ public class FlightStorage implements PrototypeCloneable<Flight> {
 
     // 6. Cargar datos iniciales desde JSON
     public static void loadFromJson(String filePath) {
-        try (FileReader reader = new FileReader(filePath)) {
+        
+       try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
+            System.out.println("Vuelos encontrados en el JSON: " + jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
 
-                // Obtener objetos necesarios (ej: Plane y Locations deben estar previamente cargados)
-                Plane plane = PlaneStorage.findById(json.getString("planeId"));
+                // Obtener el avión
+                Plane plane = PlaneStorage.findById(json.getString("plane"));
+                if (plane == null) {
+                    System.err.println("El avión con ID " + json.getString("plane") + " no fue encontrado.");
+                    continue;
+                }
+
+                // Obtener localizaciones
                 Location departureLoc = LocationStorage.findById(json.getString("departureLocation"));
                 Location arrivalLoc = LocationStorage.findById(json.getString("arrivalLocation"));
+                Location scaleLoc = null;
+                // Manejo de escala nula/cadena vacía
+                if (json.has("scaleLocation") && !json.isNull("scaleLocation")) {
+                    Object scaleObj = json.get("scaleLocation");
+                    if (scaleObj instanceof String && !((String) scaleObj).isEmpty()) {
+                        scaleLoc = LocationStorage.findById((String) scaleObj);
+                    }
+                }
 
-                // Crear el vuelo (sin escala)
-                Flight flight = new Flight(
-                        json.getString("id"),
-                        plane,
-                        departureLoc,
-                        arrivalLoc,
-                        LocalDateTime.parse(json.getString("departureDate")),
-                        json.getInt("hoursDurationArrival"),
-                        json.getInt("minutesDurationArrival")
-                );
-
-                // Si tiene escala
-                if (json.has("scaleLocation")) {
-                    Location scaleLoc = LocationStorage.findById(json.getString("scaleLocation"));
+                // Crear el vuelo
+                Flight flight;
+                if (scaleLoc != null) {
                     flight = new Flight(
                             json.getString("id"),
                             plane,
@@ -170,14 +176,31 @@ public class FlightStorage implements PrototypeCloneable<Flight> {
                             json.getInt("hoursDurationScale"),
                             json.getInt("minutesDurationScale")
                     );
+                } else {
+                    flight = new Flight(
+                            json.getString("id"),
+                            plane,
+                            departureLoc,
+                            null,
+                            arrivalLoc,
+                            LocalDateTime.parse(json.getString("departureDate")),
+                            json.getInt("hoursDurationArrival"),
+                            json.getInt("minutesDurationArrival"),
+                            0,
+                            0
+                    );
                 }
-
                 flights.add(flight);
+                // Asocia vuelo a avión si tienes este método
+                plane.addFlight(flight);
             }
         } catch (Exception e) {
             System.err.println("Error loading flights from JSON: " + e.getMessage());
         }
+       System.out.println("Total de vuelos cargados en memoria: " + flights.size());
     }
+    
+    
 
     private FlightStorage() {
         this.flights = new ArrayList<>();
@@ -203,7 +226,7 @@ public class FlightStorage implements PrototypeCloneable<Flight> {
 
     public Plane getPlane(String Id) {
         for (Plane plane : this.planes) {
-            if (plane.getId() == Id) {
+            if (plane.getId().equals(Id)) {
                 return plane;
             }
         }
@@ -228,5 +251,6 @@ public class FlightStorage implements PrototypeCloneable<Flight> {
         }
         return null; // Flight not found
     }
+   
 
 }

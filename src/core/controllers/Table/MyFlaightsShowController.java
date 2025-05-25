@@ -17,11 +17,11 @@ public class MyFlaightsShowController {
     }
     private JTable myFlightsTable;
     private String currentPassengerId; // ID del pasajero logueado o seleccionado
-//
-//    public MyFlaightsShowControllerJTable myFlightsTable, String passengerId) {
-//        this.myFlightsTable = myFlightsTable;
-//        this.currentPassengerId = passengerId; // El ID del pasajero actual
-//    }
+////
+////    public MyFlaightsShowControllerJTable myFlightsTable, String passengerId) {
+////        this.myFlightsTable = myFlightsTable;
+////        this.currentPassengerId = passengerId; // El ID del pasajero actual
+////    }
 
     public void refreshTable() {
         DefaultTableModel model = (DefaultTableModel) myFlightsTable.getModel();
@@ -30,25 +30,27 @@ public class MyFlaightsShowController {
         model.setRowCount(0);
 
         // Obtener los vuelos del pasajero actual, ya ordenados y como copias desde FlightStorage
-//        List<Flight> mySortedFlights = FlightStorage.getInstance().getFlightsByPassengerId(currentPassengerId);
+        //List<Flight> mySortedFlights = FlightStorage.getInstance().getFlightsByPassengerId(currentPassengerId);
 
         // Formateador opcional para la fecha y hora si LocalDateTime no se muestra bien directamente
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Rellenar la tabla
+//         //Rellenar la tabla
 //        for (Flight flight : mySortedFlights) {
 //            model.addRow(new Object[]{
 //                flight.getId(),
-//                flight.getOrigin().getCity(),
-//                flight.getDestination().getCity(),
-//                flight.getScaleLocation() != null ? flight.getScaleLocation().getCity() : "N/A", // Manejar escala opcional
+//                flight.getDepartureLocation(),
+//                flight.getArrivalLocation(),
+//                flight.getScaleLocation() != null ? flight.getScaleLocation(): "N/A", // Manejar escala opcional
 //                flight.getDepartureDate().toLocalDate().format(dateFormatter),
 //                flight.getDepartureDate().toLocalTime().format(timeFormatter),
 //                flight.getPlane().getModel()
 //                // Añade todas las columnas relevantes de tu objeto Flight
 //            });
 //        }
+//    }
+    
     }
     
 }
