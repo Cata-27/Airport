@@ -15,6 +15,7 @@ public class LocationStorage {
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
+            locations.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
                 Location location = new Location(

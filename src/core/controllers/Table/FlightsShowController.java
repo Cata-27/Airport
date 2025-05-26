@@ -33,16 +33,17 @@ public class FlightsShowController {
 
          //Rellenar la tabla
        for (Flight flight : flights) {
-        model.addRow(new Object[]{
+    model.addRow(new Object[]{
         flight.getId(),
-        flight.getPlane().getModel(),
-        flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "-", // 
+        flight.getDepartureLocation().getAirportId(),
+        flight.getArrivalLocation().getAirportId(), // <--- CAMBIO
+        flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "-",
         flight.getDepartureDate().toLocalDate().format(dateFormatter),
-        flight.getDepartureDate().toLocalTime().format(timeFormatter),
-        flight.getHoursDurationArrival() + "h " + flight.getMinutesDurationArrival() + "m",
-        flight.getScaleLocation() != null ? (flight.getHoursDurationScale() + "h " + flight.getMinutesDurationScale() + "m") : "N/A"
+        flight.calculateArrivalDate().toLocalDate().format(dateFormatter),
+        flight.getPlane().getId(), 
+        flight.getNumPassengers() 
     });
 }
-    }
     
 }
+    }

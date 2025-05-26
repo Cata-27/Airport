@@ -26,6 +26,7 @@ import core.models.storage.PlaneStorage;
 import java.awt.Color;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -328,6 +329,11 @@ public class AirportFrame extends javax.swing.JFrame {
 
         userSelect.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         userSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select User" }));
+        userSelect.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userSelectMouseClicked(evt);
+            }
+        });
         userSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 userSelectActionPerformed(evt);
@@ -460,7 +466,7 @@ public class AirportFrame extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel14.setText("Max Capacity:");
         jPanel3.add(jLabel14);
-        jLabel14.setBounds(53, 276, 114, 25);
+        jLabel14.setBounds(53, 276, 109, 25);
 
         AirlineAirplaneTxt.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jPanel3.add(AirlineAirplaneTxt);
@@ -1718,25 +1724,22 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_DelayFlightBtnActionPerformed
 
     private void RefreshShowMyFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowMyFlightsBtnActionPerformed
-
-    String selectedPassengerId = userSelect.getSelectedItem().toString();
     FlightStorage.loadFromJson("json/flights.json");
-    myFlaightsShowController = new MyFlaightsShowController(myFlightsTable, selectedPassengerId);
-    myFlaightsShowController.refreshTable();
+    FlightsShowController controller = new FlightsShowController(jTable3);
+    controller.refreshTable();
 //        
     }//GEN-LAST:event_RefreshShowMyFlightsBtnActionPerformed
 
     private void RefreshShowAllPassengersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPassengersBtnActionPerformed
-    // 1. Recargar los datos desde el JSON 
-    PassengerStorage.loadFromJson("json/passengers.json"); // ruta 
-
-    // 2. Actualizar la tabla
-    AllPassegerShowController controller = new AllPassegerShowController(TablePassengers);
+     AllPassegerShowController controller = new AllPassegerShowController(TablePassengers);
     controller.refreshTable();
 
     }//GEN-LAST:event_RefreshShowAllPassengersBtnActionPerformed
 
     private void RefreshShowAllFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllFlightsBtnActionPerformed
+    PlaneStorage.loadFromJson("json/planes.json");
+    LocationStorage.loadFromJson("json/locations.json"); 
+    FlightStorage.loadFromJson("json/flights.json");
     FlightsShowController controller = new FlightsShowController(jTable3);
     controller.refreshTable();
 
@@ -1759,17 +1762,13 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void userSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userSelectActionPerformed
-        try {
-            String id = userSelect.getSelectedItem().toString();
-            if (!id.equals(userSelect.getItemAt(0))) {
-                IdUpdateInfoTxt.setText(id);
-                IdAddToFlightTxt.setText(id);
-            } else {
-                IdUpdateInfoTxt.setText("");
-                IdAddToFlightTxt.setText("");
-            }
-        } catch (Exception e) {
-        }
+    userSelect.removeAllItems();
+    List<Passenger> pasajeros = PassengerStorage.getAll();
+    for (Passenger p : pasajeros) {
+        userSelect.addItem(String.valueOf(p.getId()));
+    }
+    userSelect.addItem("Select User"); // Opción por defecto al final
+
     }//GEN-LAST:event_userSelectActionPerformed
 
     private void IdPassengerRegisterTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdPassengerRegisterTxtActionPerformed
@@ -1783,6 +1782,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void ScaleLocationFlightComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ScaleLocationFlightComboActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ScaleLocationFlightComboActionPerformed
+
+    private void userSelectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userSelectMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userSelectMouseClicked
 
     /**
      * @param args the command line arguments

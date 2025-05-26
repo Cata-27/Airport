@@ -1,21 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package main;
 
 import core.views.AirportFrame;
 import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.UIManager;
+import core.models.storage.PassengerStorage;
+import core.models.storage.PlaneStorage;
+import core.models.storage.LocationStorage;
+import core.models.storage.FlightStorage;
 
-/**
- *
- * @author ASUS-E1504F
- */
 public class Main {
-    
-public static void main(String args[]) {
-    
+
+    public static void main(String args[]) {
         System.setProperty("flatlaf.useNativeLibrary", "false");
 
         try {
@@ -23,6 +18,13 @@ public static void main(String args[]) {
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }
+
+        // Cargar los JSON a memoria una sola vez al arrancar la app
+        PassengerStorage.loadFromJson("json/passengers.json");
+        PlaneStorage.loadFromJson("json/planes.json");
+        LocationStorage.loadFromJson("json/locations.json");
+        FlightStorage.loadFromJson("json/flights.json");
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -30,5 +32,4 @@ public static void main(String args[]) {
             }
         });
     }
-
 }

@@ -7,6 +7,7 @@ package core.controllers;
 import core.controllers.utils.Status;
 import core.models.Plane;
 import core.controllers.utils.Response;
+import core.models.Passenger;
 import core.models.storage.PassengerStorage;
 import java.time.LocalDate;
 
@@ -73,6 +74,12 @@ public class PassengerController {
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
+            Passenger passenger = new Passenger(
+            idLong, firstName, lastName,
+            LocalDate.of(yearInt, monthInt, dayInt),
+            phoneCodeInt, phoneLong, country
+    );
+            PassengerStorage.save(passenger); 
             return new Response("Passenger created successfully", Status.CREATED);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);

@@ -38,6 +38,7 @@ public class PassengerStorage implements PrototypeCloneable<Passenger> {
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
+            passengers.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
                 Passenger passenger = new Passenger(

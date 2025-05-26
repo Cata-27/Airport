@@ -138,7 +138,8 @@ public class FlightStorage implements PrototypeCloneable<Flight> {
         
        try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
-            System.out.println("Vuelos encontrados en el JSON: " + jsonArray.length());
+            flights.clear();
+            //System.out.println("Vuelos encontrados en el JSON: " + jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
 
