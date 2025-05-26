@@ -14,14 +14,12 @@ public class PlaneController {
             // Validación y parsing del ID
             try {
                 idInt = Integer.parseInt(id);
-                if (idInt <= 0) { // El ID debe ser positivo
+                if (idInt <= 0) { 
                     return new Response("Id must be positive", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException ex) {
                 return new Response("Id must be numeric", Status.BAD_REQUEST);
             }
-
-            // Validaciones para campos no vacíos (Brand, Model, Airline)
             if (brand == null || brand.trim().isEmpty()) {
                 return new Response("Brand must not be empty", Status.BAD_REQUEST);
             }
@@ -29,18 +27,14 @@ public class PlaneController {
             if (model == null || model.trim().isEmpty()) {
                 return new Response("Model must not be empty", Status.BAD_REQUEST);
             }
-
-            // Validación y parsing de la capacidad máxima
             try {
                 maxCapacityInt = Integer.parseInt(maxCapacity);
-                if (maxCapacityInt <= 0) { // La capacidad debe ser positiva
+                if (maxCapacityInt <= 0) { 
                     return new Response("Max Capacity must be positive", Status.BAD_REQUEST);
                 }
             } catch (NumberFormatException ex) {
                 return new Response("Max Capacity must be numeric", Status.BAD_REQUEST);
             }
-
-            // Validación de la aerolínea (como código de aeropuerto de 3 letras mayúsculas)
             if (airline == null || airline.trim().isEmpty()) {
                 return new Response("Airline must not be empty", Status.BAD_REQUEST);
             }
@@ -49,24 +43,16 @@ public class PlaneController {
             }
 
             // Obtener instancia de Storage y agregar el avión
-//            Storage storage = Storage.getInstance();
-//            if (!storage.addPlane(new Plane(id, brand, model, maxCapacityInt, airline))) {
-//                return new Response("An airplane with that id already exists", Status.BAD_REQUEST);
-//            }
+            PlaneStorage storage = PlaneStorage.getInstance();
+            if (!storage.addPlane(new Plane(id, brand, model, maxCapacityInt, airline))) {
+                return new Response("An airplane with that id already exists", Status.BAD_REQUEST);
+            }
 
             return new Response("Airplane created successfully", Status.CREATED);
         } catch (Exception ex) {
-            // Captura cualquier excepción inesperada
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /**
-     * Lee y recupera los datos de un avión por su ID.
-     *
-     * @param id String El identificador del avión a buscar.
-     * @return Response Objeto de respuesta que contiene el avión encontrado o un mensaje de error.
-     */
     public static Response readAirplane(String id) {
         try {
             int idInt;
@@ -80,8 +66,6 @@ public class PlaneController {
             } catch (NumberFormatException ex) {
                 return new Response("Id must be numeric", Status.BAD_REQUEST);
             }
-
-            // Obtener instancia de Storage y buscar el avión
             PlaneStorage storage = PlaneStorage.getInstance();
             Plane plane = storage.getPlane(idInt);
 
@@ -97,8 +81,6 @@ public class PlaneController {
         try {
             int idInt;
             int maxCapacityInt;
-
-            // Validación y parsing del ID
             try {
                 idInt = Integer.parseInt(id);
                 if (idInt <= 0) {
@@ -107,15 +89,11 @@ public class PlaneController {
             } catch (NumberFormatException ex) {
                 return new Response("Id must be numeric", Status.BAD_REQUEST);
             }
-
-            // Obtener instancia de Storage y verificar si el avión existe
             PlaneStorage storage = PlaneStorage.getInstance();
             Plane plane = storage.getPlane(idInt);
             if (plane == null) {
                 return new Response("Airplane not found", Status.NOT_FOUND);
             }
-
-            // Validaciones para campos no vacíos
             if (brand == null || brand.trim().isEmpty()) {
                 return new Response("Brand must not be empty", Status.BAD_REQUEST);
             }
@@ -132,8 +110,6 @@ public class PlaneController {
             } catch (NumberFormatException ex) {
                 return new Response("Max Capacity must be numeric", Status.BAD_REQUEST);
             }
-
-            // Validación de la aerolínea (como código de aeropuerto de 3 letras mayúsculas)
             if (airline == null || airline.trim().isEmpty()) {
                 return new Response("Airline must not be empty", Status.BAD_REQUEST);
             }
@@ -158,8 +134,6 @@ public class PlaneController {
             } catch (NumberFormatException ex) {
                 return new Response("Id must be numeric", Status.BAD_REQUEST);
             }
-
-            // Obtener instancia de Storage y eliminar el avión
             PlaneStorage storage = PlaneStorage.getInstance();
             if (!storage.delPlane(idInt)) {
                 return new Response("Airplane not found", Status.NOT_FOUND);

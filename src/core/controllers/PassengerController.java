@@ -5,7 +5,6 @@
 package core.controllers;
 
 import core.controllers.utils.Status;
-import core.models.Plane;
 import core.controllers.utils.Response;
 import core.models.Passenger;
 import core.models.storage.PassengerStorage;
@@ -75,18 +74,18 @@ public class PassengerController {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
             Passenger passenger = new Passenger(
-            idLong, firstName, lastName,
-            LocalDate.of(yearInt, monthInt, dayInt),
-            phoneCodeInt, phoneLong, country
-    );
-            PassengerStorage.save(passenger); 
+                    idLong, firstName, lastName,
+                    LocalDate.of(yearInt, monthInt, dayInt),
+                    phoneCodeInt, phoneLong, country
+            );
+            PassengerStorage.save(passenger);
             return new Response("Passenger created successfully", Status.CREATED);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public static Response readPlane(String id) {
+    public static Response readPassenger(String id) {
         try {
             long idLong;
             try {
@@ -99,12 +98,11 @@ public class PassengerController {
             }
 
             PassengerStorage storage = PassengerStorage.getInstance();
-
-            Plane plane = storage.getPlane(idLong);
-            if (plane == null) {
-                return new Response("Plane not found", Status.NOT_FOUND);
+            Passenger passenger = storage.findById(idLong);
+            if (passenger == null) {
+                return new Response("Passenger not found", Status.NOT_FOUND);
             }
-            return new Response("Plane found", Status.OK, plane);
+            return new Response("Passenger found", Status.OK, passenger);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }
@@ -127,8 +125,8 @@ public class PassengerController {
 
             PassengerStorage storage = PassengerStorage.getInstance();
 
-            Plane plane = storage.getPlane(idLong);
-            if (plane == null) {
+            Passenger passenger = storage.findById(idLong);
+            if (passenger == null) {
                 return new Response("Plane not found", Status.NOT_FOUND);
             }
 
@@ -199,7 +197,7 @@ public class PassengerController {
         }
     }
 
-    public static Response deletePlane(String id) {
+    public static Response deletePassenger(String id) {
         try {
             long idLong;
 
@@ -213,10 +211,10 @@ public class PassengerController {
             }
 
             PassengerStorage storage = PassengerStorage.getInstance();
-            if (!storage.delPlane(idLong)) {
-                return new Response("Plane not found", Status.NOT_FOUND);
+            if (!storage.deleteById(idLong)) {
+                return new Response("Passenger not found", Status.NOT_FOUND);
             }
-            return new Response("Plane deleted successfully", Status.NO_CONTENT);
+            return new Response("Passenger deleted successfully", Status.NO_CONTENT);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
         }

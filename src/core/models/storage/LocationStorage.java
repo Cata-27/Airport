@@ -1,13 +1,14 @@
 package core.models.storage;
 
 import core.models.Location;
+import core.observer.Observable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationStorage {
+public class LocationStorage extends Observable{
 
     private static List<Location> locations = new ArrayList<>();
     private static LocationStorage instance;

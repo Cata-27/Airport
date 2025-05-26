@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class FlightsShowController {
+
     private JTable allFlightsTable; // La JTable que se va a actualizar
 
     public FlightsShowController(JTable allFlightsTable) {
@@ -31,19 +32,19 @@ public class FlightsShowController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-         //Rellenar la tabla
-       for (Flight flight : flights) {
-    model.addRow(new Object[]{
-        flight.getId(),
-        flight.getDepartureLocation().getAirportId(),
-        flight.getArrivalLocation().getAirportId(), // <--- CAMBIO
-        flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "-",
-        flight.getDepartureDate().toLocalDate().format(dateFormatter),
-        flight.calculateArrivalDate().toLocalDate().format(dateFormatter),
-        flight.getPlane().getId(), 
-        flight.getNumPassengers() 
-    });
-}
-    
-}
+        //Rellenar la tabla
+        for (Flight flight : flights) {
+            model.addRow(new Object[]{
+                flight.getId(),
+                flight.getDepartureLocation().getAirportId(),
+                flight.getArrivalLocation().getAirportId(), // <--- CAMBIO
+                flight.getScaleLocation() != null ? flight.getScaleLocation().getAirportId() : "-",
+                flight.getDepartureDate().toLocalDate().format(dateFormatter),
+                flight.calculateArrivalDate().toLocalDate().format(dateFormatter),
+                flight.getPlane().getId(),
+                flight.getNumPassengers()
+            });
+        }
+
     }
+}

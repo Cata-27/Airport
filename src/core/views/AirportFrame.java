@@ -34,7 +34,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author edangulo
  */
-public class AirportFrame extends javax.swing.JFrame {
+public class AirportFrame extends javax.swing.JFrame  {
 
     /**
      * Creates new form AirportFrame
@@ -108,6 +108,20 @@ public class AirportFrame extends javax.swing.JFrame {
             ScaleDurationFlightMinuteCombo.addItem("" + i);
             MinuteDelayCombo.addItem("" + i);
         }
+    }
+    private void Update(){
+        try {
+            String id = userSelect.getSelectedItem().toString();
+            if (!id.equals(userSelect.getItemAt(0))) {
+                IdUpdateInfoTxt.setText(id);
+                IdAddToFlightTxt.setText(id);
+            } else {
+                IdUpdateInfoTxt.setText("");
+                IdAddToFlightTxt.setText("");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  
     }
 
     /**
@@ -1724,37 +1738,37 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_DelayFlightBtnActionPerformed
 
     private void RefreshShowMyFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowMyFlightsBtnActionPerformed
-    FlightStorage.loadFromJson("json/flights.json");
-    FlightsShowController controller = new FlightsShowController(jTable3);
-    controller.refreshTable();
+        FlightStorage.loadFromJson("json/flights.json");
+        FlightsShowController controller = new FlightsShowController(jTable3);
+        controller.refreshTable();
 //        
     }//GEN-LAST:event_RefreshShowMyFlightsBtnActionPerformed
 
     private void RefreshShowAllPassengersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPassengersBtnActionPerformed
-     AllPassegerShowController controller = new AllPassegerShowController(TablePassengers);
-    controller.refreshTable();
+        AllPassegerShowController controller = new AllPassegerShowController(TablePassengers);
+        controller.refreshTable();
 
     }//GEN-LAST:event_RefreshShowAllPassengersBtnActionPerformed
 
     private void RefreshShowAllFlightsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllFlightsBtnActionPerformed
-    PlaneStorage.loadFromJson("json/planes.json");
-    LocationStorage.loadFromJson("json/locations.json"); 
-    FlightStorage.loadFromJson("json/flights.json");
-    FlightsShowController controller = new FlightsShowController(jTable3);
-    controller.refreshTable();
+        PlaneStorage.loadFromJson("json/planes.json");
+        LocationStorage.loadFromJson("json/locations.json");
+        FlightStorage.loadFromJson("json/flights.json");
+        FlightsShowController controller = new FlightsShowController(jTable3);
+        controller.refreshTable();
 
     }//GEN-LAST:event_RefreshShowAllFlightsBtnActionPerformed
 
     private void RefreshShowAllPlanesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllPlanesBtnActionPerformed
-    PlaneStorage.loadFromJson("json/planes.json");
-    PlaneShowController controller = new PlaneShowController(jTable4);
-    controller.refreshTable();
+        PlaneStorage.loadFromJson("json/planes.json");
+        PlaneShowController controller = new PlaneShowController(jTable4);
+        controller.refreshTable();
     }//GEN-LAST:event_RefreshShowAllPlanesBtnActionPerformed
 
     private void RefreshShowAllLocationsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshShowAllLocationsBtnActionPerformed
-    LocationStorage.loadFromJson("json/locations.json");
-    LocationsShowController controller = new LocationsShowController(jTable5);
-    controller.refreshTable();
+        LocationStorage.loadFromJson("json/locations.json");
+        LocationsShowController controller = new LocationsShowController(jTable5);
+        controller.refreshTable();
     }//GEN-LAST:event_RefreshShowAllLocationsBtnActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
@@ -1762,13 +1776,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void userSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userSelectActionPerformed
-    userSelect.removeAllItems();
-    List<Passenger> pasajeros = PassengerStorage.getAll();
-    for (Passenger p : pasajeros) {
-        userSelect.addItem(String.valueOf(p.getId()));
-    }
-    userSelect.addItem("Select User"); // Opción por defecto al final
-
+        Update();
     }//GEN-LAST:event_userSelectActionPerformed
 
     private void IdPassengerRegisterTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdPassengerRegisterTxtActionPerformed

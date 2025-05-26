@@ -1,7 +1,7 @@
 package core.models.storage;
 
 import core.models.Passenger;
-import core.models.Plane;
+import core.observer.Observable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileReader;
@@ -9,32 +9,36 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassengerStorage implements PrototypeCloneable<Passenger> {
+public class PassengerStorage extends Observable implements PrototypeCloneable<Passenger> {
+    
     private static List<Passenger> passengers = new ArrayList<>();
     private static PassengerStorage instance;
-     //Implementación de PrototypeCloneable
+    //Implementación de PrototypeCloneable
+    
     @Override
     public Passenger clone(Passenger original) {
-        if (original == null) return null;
+        if (original == null) {
+            return null;
+        }
 
         Passenger copiedPassenger = new Passenger(
-            original.getId(),
-            original.getFirstname(),
-            original.getLastname(),
-            original.getBirthDate(),
-            original.getCountryPhoneCode(),
-            original.getPhone(),
-            original.getCountry()
+                original.getId(),
+                original.getFirstname(),
+                original.getLastname(),
+                original.getBirthDate(),
+                original.getCountryPhoneCode(),
+                original.getPhone(),
+                original.getCountry()
         );
 
         // Clonar vuelos (usando FlightStorage para copias seguras)
-        original.getFlights().forEach(f -> 
-            copiedPassenger.addFlight(FlightStorage.getInstance().clone(f))
+        original.getFlights().forEach(f
+                -> copiedPassenger.addFlight(FlightStorage.getInstance().clone(f))
         );
 
         return copiedPassenger;
     }
-    
+
     public static void loadFromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             JSONArray jsonArray = new JSONArray(new org.json.JSONTokener(reader));
@@ -42,13 +46,13 @@ public class PassengerStorage implements PrototypeCloneable<Passenger> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
                 Passenger passenger = new Passenger(
-                    json.getLong("id"),
-                    json.getString("firstname"),
-                    json.getString("lastname"),
-                    LocalDate.parse(json.getString("birthDate")),
-                    json.getInt("countryPhoneCode"),
-                    json.getLong("phone"),
-                    json.getString("country")
+                        json.getLong("id"),
+                        json.getString("firstname"),
+                        json.getString("lastname"),
+                        LocalDate.parse(json.getString("birthDate")),
+                        json.getInt("countryPhoneCode"),
+                        json.getLong("phone"),
+                        json.getString("country")
                 );
                 passengers.add(passenger);
             }
@@ -56,12 +60,14 @@ public class PassengerStorage implements PrototypeCloneable<Passenger> {
             System.err.println("Error when loading passengers: " + e.getMessage());
         }
     }
+
     public static PassengerStorage getInstance() {
         if (instance == null) {
             instance = new PassengerStorage();
         }
         return instance;
     }
+
     public static void save(Passenger passenger) {
         passengers.add(passenger);
     }
@@ -75,16 +81,12 @@ public class PassengerStorage implements PrototypeCloneable<Passenger> {
         return null;
     }
 
+    public boolean deleteById(long id) {
+        return passengers.removeIf(p -> p.getId() == id);
+    }
+
     public static List<Passenger> getAll() {
         passengers.sort((p1, p2) -> Long.compare(p1.getId(), p2.getId()));
         return new ArrayList<>(passengers);
-    }
-    
-    public Plane getPlane(long idLong) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public boolean delPlane(long idLong) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -43,31 +43,5 @@ public class AllPassegerShowController {
                 passenger.getNumFlights()
             });
         }
-    }
-//    private JTable allPassengersTable; // La JTable que se va a actualizar
-//
-//    public PassengerTableController(JTable allPassengersTable) {
-//        this.allPassengersTable = allPassengersTable;
-//    }
-//
-//    // Método que se llama desde el botón
-//    public void refreshTable() {
-//        DefaultTableModel model = (DefaultTableModel) allPassengersTable.getModel();
-//
-//        // Limpiar la tabla
-//        model.setRowCount(0);
-//
-//        // Obtener los datos de los pasajeros
-//        List<Passenger> passengers = getAllPassengersFromDataSource();
-//
-//        // Rellenar la tabla
-//        for (Passenger passenger : passengers) {
-//            model.addRow(new Object[]{
-//                passenger.getId(),
-//                passenger.getFullname(),
-//                passenger.getBirthDate().toString(), // Asegúrate de manejar el formato de fecha adecuado
-//                passenger.calculateAge()
-//            });
-//        }
-//    }    
+    }   
 }

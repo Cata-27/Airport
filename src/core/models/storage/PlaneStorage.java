@@ -1,14 +1,14 @@
 package core.models.storage;
 
-import core.models.Location;
 import core.models.Plane;
+import core.observer.Observable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaneStorage {
+public class PlaneStorage extends Observable {
 
     private static List<Plane> planes = new ArrayList<>();
     private static PlaneStorage instance;
@@ -58,29 +58,26 @@ public class PlaneStorage {
         return instance;
     }
 
-    public boolean delPlane(int id) { // Cambiar int a String
-        // Usar un iterador para eliminar elementos de una lista mientras se itera
-        // O usar removeIf para listas
-        return planes.removeIf(plane -> plane.getId().equals(id));
-        /*
-    // Alternativa con bucle tradicional si prefieres
-    for (Plane plane : this.planes) {
-        if (plane.getId().equals(id)) { // Usar .equals para Strings
-            this.planes.remove(plane);
-            return true;
-        }
-    }
-    return false;
-         */
+    public boolean delPlane(long id) {
+        String idStr = String.valueOf(id);
+        return planes.removeIf(plane -> plane.getId().equals(idStr));
     }
 
-    public Plane getPlane(int id) { // Cambiar int a String
-        for (Plane plane : this.planes) {
-            if (plane.getId().equals(id)) { // Usar .equals para Strings
+    public Plane getPlane(long id) {
+        String idStr = String.valueOf(id);
+        for (Plane plane : planes) {
+            if (plane.getId().equals(idStr)) {
                 return plane;
             }
         }
         return null;
+    }
 
+    public boolean addPlane(Plane plane) {
+        if (plane == null || findById(plane.getId()) != null) {
+            return false; // Ya existe uno con ese ID o el objeto es inválido
+        }
+        planes.add(plane);
+        return true;
     }
 }

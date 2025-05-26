@@ -4,15 +4,34 @@
  */
 package core.observer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author ASUS-E1504F
  */
-public interface Observable {
-    //Registra un Observer para recibir notificaciones de cambios.
-    void addObserver(Observer observer);
-    // Elimina un Observer para que deje de recibir notificaciones.
-    void removeObserver(Observer observer);
-     //Notifica a todos los Observers registrados que el estado del Observable ha cambiado.
-    void notifyObservers();   
+public abstract class Observable {
+
+    private List<Observer> observers;
+    public Observable() { 
+        this.observers = new ArrayList<>();
+    }
+    public void addObserver(Observer observer) {
+        if (observer == null) {
+            throw new NullPointerException("El observador no puede ser nulo.");
+        }
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+    public void notifyObservers(Object arg) {
+        List<Observer> observersCopy = new ArrayList<>(this.observers);
+        for (Observer observer : observersCopy) {
+            observer.update(arg);
+        }
+    }
 }
