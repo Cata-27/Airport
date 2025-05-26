@@ -179,7 +179,6 @@ public class PassengerController {
             if (country.trim().isEmpty()) {
                 return new Response("Country must not be empty", Status.BAD_REQUEST);
             }
-//
 //            //Update Plane object attributes
 //            passenger.setFirstName(firstName);
 //            passenger.setLastName(lastName);
@@ -190,7 +189,6 @@ public class PassengerController {
 //            passenger.setPhoneCode(phoneCodeInt);
 //            passenger.setPhone(phoneLong);
 //            passenger.setCountry(country);
-
             return new Response("Plane data updated successfully", Status.OK);
         } catch (Exception ex) {
             return new Response("Unexpected error: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);

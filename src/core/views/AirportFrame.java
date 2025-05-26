@@ -21,20 +21,17 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.storage.FlightStorage;
 import core.models.storage.LocationStorage;
-import core.models.storage.PassengerStorage;
 import core.models.storage.PlaneStorage;
 import java.awt.Color;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author edangulo
  */
-public class AirportFrame extends javax.swing.JFrame  {
+public class AirportFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form AirportFrame
@@ -109,7 +106,7 @@ public class AirportFrame extends javax.swing.JFrame  {
             MinuteDelayCombo.addItem("" + i);
         }
     }
-    private void Update(){
+    private void Update() {
         try {
             String id = userSelect.getSelectedItem().toString();
             if (!id.equals(userSelect.getItemAt(0))) {
@@ -121,9 +118,8 @@ public class AirportFrame extends javax.swing.JFrame  {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }  
+        }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
